@@ -18,14 +18,14 @@ class ContactHelper {
 
   ContactHelper.internal() ;
 
-  late Database _db ;
+  Database? _db ;
 
   Future<Database> get db async {
     if (_db != null){
-      return _db;
+      return _db!;
     } else {
       _db = await initDb();
-      return _db;
+      return _db!;
     }
   }
   Future<Database> initDb () async{
@@ -71,7 +71,7 @@ class ContactHelper {
        whereArgs: [contact.id]);
   }
 
-  Future<List>getAllContact()  async {
+  Future<List> getAllContact()  async {
     Database dbContact = await db;
     List listMap = await dbContact.rawQuery("SELECT * FROM $contactTable");
     List<Contact> listContact = [];
