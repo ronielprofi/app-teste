@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
 import '../helpers/contact_helper.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class ContactPage extends StatefulWidget {
 
@@ -78,6 +81,16 @@ class _ContactPageState extends State<ContactPage> {
                       ),
                     ),
                   ),
+                  onTap: (){
+                    ImagePicker().pickImage(source: ImageSource.camera).then((file){
+                      if(file != null) {
+                        setState(() {
+                          _userEdited = true;
+                          _editedContact!.img = file.path;
+                        });
+                      }
+                    });
+                  },
                 ),
                 TextField(
                   controller: _nameController,
@@ -129,7 +142,7 @@ class _ContactPageState extends State<ContactPage> {
                   },
                 ),
                 TextButton(
-                  child: Text("Cancelar"),
+                  child: Text("sim"),
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.pop(context);

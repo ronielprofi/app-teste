@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:listadecontatos/helpers/contact_helper.dart';
 import 'package:listadecontatos/ui/contact_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onTap: (){
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
       },
     );
   }
@@ -114,7 +115,8 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(color: Colors.red, fontSize: 20.0),
                           ),
                           onPressed: (){
-
+                            launchUrl(Uri.parse("tel:${contacts[index].phone}"));
+                            Navigator.pop(context);
                           },
                         ),
                       ),
@@ -171,7 +173,6 @@ class _HomePageState extends State<HomePage> {
   }
   void _getAllContacts(){
     helper.getAllContact().then((list){
-      print(list);
       setState(() {
         contacts = list.cast<Contact>();
       });
