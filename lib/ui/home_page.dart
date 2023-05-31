@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:listadecontatos/helpers/contact_helper.dart';
+import 'package:listadecontatos/pages/alarm.dart';
 import 'package:listadecontatos/ui/contact_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+enum OrderOptions {orderaz, orderza,alarm}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,6 +34,25 @@ class _HomePageState extends State<HomePage> {
         title: Text("Contatos"),
         backgroundColor: Colors.red,
         centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton<OrderOptions>(
+              itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+                const PopupMenuItem(
+                    child: Text("Ordenar de A-Z"),
+                    value: OrderOptions.orderaz,
+                ),
+                const PopupMenuItem(
+                  child: Text("Ordenar de Z-A"),
+                  value: OrderOptions.orderza,
+                ),
+                const PopupMenuItem(
+                  child: Text("Alarm"),
+                  value: OrderOptions.alarm,
+                ),
+              ],
+            onSelected: _orderList,
+          )
+        ],
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
@@ -176,6 +198,28 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         contacts = list.cast<Contact>();
       });
+    });
+  }
+  void _orderList(OrderOptions result){
+    switch(result){
+      case OrderOptions.orderaz:
+        contacts.sort((a, b){
+         return a.name!.toLowerCase().compareTo(b.name!.toLowerCase());
+        });
+        break;
+      case OrderOptions.orderza:
+        contacts.sort((a, b){
+         return b.name!.toLowerCase().compareTo(a.name!.toLowerCase());
+        });
+        break;
+      case OrderOptions.alarm:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Alarm_page())
+        );
+        break;
+    }
+    setState(() {
+
     });
   }
 }
